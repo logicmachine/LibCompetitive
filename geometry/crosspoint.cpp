@@ -14,3 +14,16 @@ Point crosspoint(const Line &a, const Line &b){
 	}
 }
 
+vector<Point> crosspoint(const Circle &a, const Circle &b){
+	if(!intersect(a, b)){ return vector<Point>(); }
+	double l = abs(b.c - a.c), s = (l + a.r + b.r) / 2.0;
+	double S = sqrt(s * (s - l) * (s - a.r) * (s - b.r));
+	double d = (S * 2) / l, t = sqrt(a.r * a.r - d * d);
+	Point v = t * unit(b.c - a.c);
+	Point w = d * unit(ortho(v));
+	Point x = a.c + v + w, y = a.c + v - w;
+	if(tolerant_eq(x, y)){ return vector<Point>(1, x); }
+	vector<Point> ans(2); ans[0] = x; ans[1] = y;
+	return ans;
+}
+

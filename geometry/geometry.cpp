@@ -43,6 +43,8 @@ bool tolerant_eq(const Point &a, const Point &b){
 	return tolerant_eq(a.x, b.x) && tolerant_eq(a.y, b.y);
 }
 double abs(const Point &p){ return sqrt(p.x * p.x + p.y * p.y); }
+Point unit(const Point &p){ return p / abs(p); }
+Point ortho(const Point &p){ return Point(-p.y, p.x); }
 double cross(const Point &a, const Point &b){ return a.x * b.y - a.y * b.x; }
 double dot(const Point &a, const Point &b){ return a.x * b.x + a.y * b.y; }
 int ccw(const Point &a, const Point &b, const Point &c){
