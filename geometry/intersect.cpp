@@ -45,6 +45,7 @@ bool intersect(const Circle &a, const Point &b){ return intersect(b, a); }
 bool intersect(const Circle &a, const Line &b){ return intersect(b, a); }
 bool intersect(const Circle &a, const Segment &b){ return intersect(b, a); }
 bool intersect(const Circle &a, const Circle &b){
-	return abs(a.c - b.c) <= a.r + b.r;
+	double d = abs(a.c - b.c);
+	return (a.r - d < b.r + EPS) && (a.r + d > b.r - EPS);
 }
 
