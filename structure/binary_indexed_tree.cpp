@@ -23,21 +23,3 @@ public:
 
 };
 
-#include <iostream>
-
-int main(){
-	int n, m;
-	cin >> n >> m;
-	BinaryIndexedTree<int> bit(n);
-	while(m--){
-		int c, i, x;
-		cin >> c >> i >> x;
-		if(c == 0){
-			cout << bit.sum(i) << endl;
-		}else{
-			bit.add(i, x);
-		}
-	}
-	return 0;
-}
-
