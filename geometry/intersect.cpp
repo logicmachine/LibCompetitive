@@ -30,9 +30,9 @@ bool intersect(const Line &a, const Circle &b){
 bool intersect(const Segment &a, const Point &b){ return intersect(b, a); }
 bool intersect(const Segment &a, const Line &b){ return intersect(b, a); }
 bool intersect(const Segment &a, const Segment &b){
-	if(ccw(a.a, a.b, b.a) * ccw(a.a, a.b, b.b) < 0.0){ return true; }
-	if(ccw(b.a, b.b, a.a) * ccw(b.a, b.b, a.b) < 0.0){ return true; }
-	return false;
+	if(ccw(a.a, a.b, b.a) * ccw(a.a, a.b, b.b) > 0.0){ return false; }
+	if(ccw(b.a, b.b, a.a) * ccw(b.a, b.b, a.b) > 0.0){ return false; }
+	return true;
 }
 double dist(const Segment &a, const Point &b);
 bool intersect(const Segment &a, const Circle &b){
