@@ -43,6 +43,7 @@ bool tolerant_eq(const Point &a, const Point &b){
 	return tolerant_eq(a.x, b.x) && tolerant_eq(a.y, b.y);
 }
 double abs(const Point &p){ return sqrt(p.x * p.x + p.y * p.y); }
+double norm(const Point &p){ return p.x * p.x + p.y * p.y; }
 Point unit(const Point &p){ return p / abs(p); }
 Point ortho(const Point &p){ return Point(-p.y, p.x); }
 double cross(const Point &a, const Point &b){ return a.x * b.y - a.y * b.x; }
@@ -77,8 +78,8 @@ bool tolerant_eq(const Line &a, const Line &b){
 	return abs(cross(a.b - a.a, b.a - a.a)) < EPS;
 }
 Point projection(const Line &l, const Point &p){
-	double t = dot(p - l.a, l.a - l.b) / abs(l.a - l.b);
-	return l.a + t * (l.a - l.b);
+	double t = dot(p - l.a, l.b - l.a) / norm(l.b - l.a);
+	return l.a + t * (l.b - l.a);
 }
 Point reflection(const Line &l, const Point &p){
 	return p + 2.0 * (projection(l, p) - p);
@@ -130,6 +131,11 @@ bool tolerant_eq(const Circle &a, const Circle &b){
 }
 
 struct Polygon : public vector<Point> {
+	Polygon() : vector<Point>() { }
+	explicit Polygon(size_t s, const Point &p = Point()) :
+		vector<Point>(s, p)
+	{ }
+
 	static Polygon invalid(){ return Polygon(); }
 	bool is_valid() const { return size() > 0; }
 };
