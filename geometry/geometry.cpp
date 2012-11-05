@@ -91,9 +91,9 @@ struct Segment {
 		a(a), b(b)
 	{ }
 
-	static Line invalid(){
+	static Segment invalid(){
 		Point inv = Point::invalid();
-		return Line(inv, inv);
+		return Segment(inv, inv);
 	}
 	bool is_valid() const { return a.is_valid() && b.is_valid(); }
 
