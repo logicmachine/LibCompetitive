@@ -63,7 +63,7 @@ included = []
 lines = load_file(args[0], included, standard_libraries)
 if options.line:
 	print "#line 1 \"include-section\""
-for name in standard_libraries:
+for name in set(standard_libraries):
 	print "#include <%s>" % name
 if options.using != '':
 	print "using namespace %s;" % options.using
