@@ -1,5 +1,6 @@
 #include <utility>
 
+using namespace std;
 typedef long long ll;
 
 pair<ll, ll> extgcd(ll a, ll b){
