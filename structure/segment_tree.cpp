@@ -7,7 +7,7 @@ template <typename T, T _Default, typename _Func>
 class SegmentTree {
 
 public:
-	SegmentTree(int n, const _Func &func = _Func()) :
+	explicit SegmentTree(int n, const _Func &func = _Func()) :
 		m_func(func)
 	{
 		int m = 1;
