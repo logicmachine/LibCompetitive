@@ -1,3 +1,6 @@
+/**
+ *  @file structure/binary_indexed_tree.h
+ */
 #pragma once
 #include <vector>
 #include "common/header.h"
@@ -37,7 +40,7 @@ public:
 	 *  計算量は \f$ \mathcal{O}(log{n}) \f$。
 	 *
 	 *  @param[in] i  区間の大きさ
-	 *  @returns   0番目からi-1番目までの要素の総和
+	 *  @return   0番目からi-1番目までの要素の総和
 	 */
 	T sum(int i){
 		T s = T();
