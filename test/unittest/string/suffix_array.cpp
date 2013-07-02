@@ -19,9 +19,9 @@ TEST(StringSuffixArray, TestCorrectnessRandom){
 		int n = N[i];
 		string s = generate_random_string(n);
 		SuffixArray sa(s);
-		ASSERT_EQ(n + 1, sa.size());
-		for(int i = 0; i + 1 < sa.size(); ++i){
-			EXPECT_LT(strcmp(sa[i], sa[i + 1]), 0);
+		ASSERT_EQ(n + 1, static_cast<int>(sa.size()));
+		for(size_t j = 0; j + 1 < sa.size(); ++j){
+			EXPECT_LT(strcmp(sa[j], sa[j + 1]), 0);
 		}
 	}
 }
@@ -33,9 +33,9 @@ TEST(StringSuffixArray, TestCorrectnessRepeat){
 		int n = N[i];
 		string s(n, 'a');
 		SuffixArray sa(s);
-		ASSERT_EQ(n + 1, sa.size());
-		for(int i = 0; i + 1 < sa.size(); ++i){
-			EXPECT_LT(strcmp(sa[i], sa[i + 1]), 0);
+		ASSERT_EQ(n + 1, static_cast<int>(sa.size()));
+		for(size_t j = 0; j + 1 < sa.size(); ++j){
+			EXPECT_LT(strcmp(sa[j], sa[j + 1]), 0);
 		}
 	}
 }
@@ -45,7 +45,6 @@ TEST(StringSuffixArray, TestPerformance){
 	const int N = 50000;
 	string s = generate_random_string(N);
 	SuffixArray sa(s);
-	volatile const char *c = sa[N];
-	ASSERT_LE(stopwatch.get(), 1000);
+	ASSERT_LE(stopwatch.get(), 1000u);
 }
 

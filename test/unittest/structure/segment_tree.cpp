@@ -1,13 +1,19 @@
 #include <gtest/gtest.h>
-#include "structure/segment_tree.cpp"
+#include "structure/segment_tree.h"
 #include "../../utility/random.h"
 #include "../../utility/stopwatch.h"
+#include <algorithm>
 #include <climits>
+
+template <typename T>
+struct MaxFunc {
+	T operator()(const T &a, const T &b) const { return max(a, b); }
+};
 
 TEST(StructureSegmentTree, TestCorrectness){
 	const int N = 100;
 	vector<int> naive_vector(N);
-	SegmentTree< int, INT_MIN, MaxFuncObject<int> > st_max(N);
+	libcomp::structure::SegmentTree< int, INT_MIN, MaxFunc<int> > st_max(N);
 	for(int i = 0; i < 1000; ++i){
 		int p = testtool::random() % N;
 		int v = static_cast<int>(testtool::random() & 0xffff) - 0x8000;
@@ -27,7 +33,7 @@ TEST(StructureSegmentTree, TestCorrectness){
 TEST(StructureSegmentTree, TestPerformance){
 	testtool::StopWatch stopwatch;
 	const int N = 100000;
-	SegmentTree< int, INT_MIN, MaxFuncObject<int> > st_max(N);
+	libcomp::structure::SegmentTree< int, INT_MIN, MaxFunc<int> > st_max(N);
 	volatile int answer = 0; // avoiding optimization
 	for(int i = 0; i < 100000; ++i){
 		int p = testtool::random() % N;
@@ -38,6 +44,6 @@ TEST(StructureSegmentTree, TestPerformance){
 		if(a < b){ swap(a, b); }
 		answer += st_max.query(a, b);
 	}
-	ASSERT_LE(stopwatch.get(), 500);
+	ASSERT_LE(stopwatch.get(), 500u);
 }
 

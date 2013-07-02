@@ -14,7 +14,7 @@ namespace math {
  */
 
 pair<ll, ll> extgcd(ll a, ll b){
-	ll g = a, x = 1, y = 0;
+	ll x = 1, y = 0;
 	if(b != 0){
 		pair<ll, ll> p = extgcd(b, a % b);
 		x = p.second;
