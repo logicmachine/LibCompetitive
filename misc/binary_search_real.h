@@ -1,8 +1,16 @@
+/**
+ *  @file misc/binary_search_real.h
+ */
 #pragma once
 #include <common/header.h>
 
 namespace libcomp {
 namespace misc {
+
+/**
+ *  @defgroup misc libcomp::misc
+ *  @{
+ */
 
 /**
  *  @brief 汎用二分探索
@@ -27,6 +35,10 @@ double binary_search(double l, double r, const Function &f){
 	}
 	return l;
 }
+
+/**
+ *  @}
+ */
 
 }
 }
