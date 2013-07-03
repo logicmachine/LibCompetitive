@@ -17,7 +17,7 @@ namespace misc {
  *  @brief 汎用二分探索
  *
  *  \f$ f(x) = \mathit{true}, l \le x < r \f$ となる最小の \f$ x \f$ を求める。
- *  計算量は \f$ \mathcal{O}(log(r-l)) \f$。
+ *  計算量は \f$ \mathcal{O}(\log(r-l)) \f$。
  *
  *  @param[in] l     探索範囲の下限
  *  @param[in] r     探索範囲の上限

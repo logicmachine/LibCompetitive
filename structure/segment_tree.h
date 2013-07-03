@@ -88,7 +88,7 @@ public:
 	 *  @brief 葉の更新
 	 *
 	 *  i番目の葉の値をvalで更新する。また、必要に応じて節点の値も更新する。
-	 *  計算量は \f$ \mathcal{O}(log{n}) \f$。
+	 *  計算量は \f$ \mathcal{O}(\log{n}) \f$。
 	 *
 	 *  @param[in] i    更新したい葉のインデックス
 	 *  @param[in] val  更新後の値
@@ -106,7 +106,7 @@ public:
 	 *  @brief 区間についての問い合わせ
 	 *
 	 *  インデックスが区間 [a, b) に含まれる要素すべてを func で結合した結果を求める。
-	 *  計算量は \f$ \mathcal{O}(log{n}) \f$。
+	 *  計算量は \f$ \mathcal{O}(\log{n}) \f$。
 	 *
 	 *  @param[in] a  区間の始端
 	 *  @param[in] b  区間の終端

@@ -19,7 +19,7 @@ namespace math {
  *  @brief 高速フーリエ変換
  *
  *  Cooley-Tukey法による高速フーリエ変換。
- *  計算量は \f$ \mathcal{O}(n log{n}) \f$
+ *  計算量は \f$ \mathcal{O}(n \log{n}) \f$
  *
  *  @param[out] dst  変換結果の出力先バッファ
  *  @param[in]  src  入力データの先頭を指すポインタ
