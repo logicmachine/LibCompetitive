@@ -11,7 +11,8 @@ namespace libcomp {
 namespace structure {
 
 /**
- *  @defgroup structure libcomp::structure
+ *  @defgroup segment_tree Segment tree
+ *  @ingroup  structure
  *  @{
  */
 

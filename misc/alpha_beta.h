@@ -10,7 +10,8 @@ namespace libcomp {
 namespace misc {
 
 /**
- *  @defgroup misc libcomp::misc
+ *  @defgroup alpha_beta Alpha-beta pruning
+ *  @ingroup  misc
  *  @{
  */
 

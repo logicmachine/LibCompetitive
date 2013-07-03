@@ -11,7 +11,8 @@ namespace libcomp {
 namespace graph {
 
 /**
- *  @defgroup graph libcomp::graph
+ *  @defgroup minimum_cost_flow_primal_dual Minimum cost flow (Primal-Dual)
+ *  @ingroup  graph
  *  @{
  */
 

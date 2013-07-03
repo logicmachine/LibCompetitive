@@ -11,7 +11,8 @@ namespace libcomp {
 namespace math {
 
 /**
- *  @defgroup math_rational libcomp::math::Rational
+ *  @defgroup rational Rational
+ *  @ingroup  math
  *  @{
  */
 

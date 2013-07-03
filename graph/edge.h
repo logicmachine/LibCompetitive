@@ -8,7 +8,8 @@ namespace libcomp {
 namespace graph {
 
 /**
- *  @defgroup graph libcomp::graph
+ *  @defgroup edge Edge
+ *  @ingroup  graph
  *  @{
  */
 

@@ -8,7 +8,8 @@ namespace libcomp {
 namespace misc {
 
 /**
- *  @defgroup misc libcomp::misc
+ *  @defgroup binary_search_real Binary Search (real)
+ *  @ingroup  misc
  *  @{
  */
 

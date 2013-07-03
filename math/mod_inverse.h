@@ -9,7 +9,8 @@ namespace libcomp {
 namespace math {
 
 /**
- *  @defgroup math libcomp::math
+ *  @defgroup mod_inverse Modular multiplicative inverse
+ *  @ingroup  math
  *  @{
  */
 

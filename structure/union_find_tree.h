@@ -9,7 +9,8 @@ namespace libcomp {
 namespace structure {
 
 /**
- *  @defgroup structure libcomp::structure
+ *  @defgroup union_find_tree Union-find tree
+ *  @ingroup  structure
  *  @{
  */
 

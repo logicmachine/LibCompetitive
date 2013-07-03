@@ -10,7 +10,8 @@ namespace libcomp {
 namespace math {
 
 /**
- *  @defgroup math libcomp::math
+ *  @defgroup eratosthenes Eratosthenes
+ *  @ingroup  math
  *  @{
  */
 

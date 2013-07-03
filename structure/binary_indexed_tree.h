@@ -9,7 +9,8 @@ namespace libcomp {
 namespace structure {
 
 /**
- *  @defgroup structure libcomp::structure
+ *  @defgroup binary_indexed_tree Binary indexed tree
+ *  @ingroup  structure
  *  @{
  */
 

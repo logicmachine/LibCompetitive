@@ -10,7 +10,8 @@ namespace libcomp {
 namespace graph {
 
 /**
- *  @defgroup graph libcomp::graph
+ *  @defgroup separator_decomposition Separator decomposition
+ *  @ingroup  graph
  *  @{
  */
 

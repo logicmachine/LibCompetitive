@@ -11,7 +11,8 @@ namespace libcomp {
 namespace graph {
 
 /**
- *  @defgroup graph libcomp::graph
+ *  @defgroup maximum_flow_dinic Maximum flow (Dinic)
+ *  @ingroup  graph
  *  @{
  */
 
