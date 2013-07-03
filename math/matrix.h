@@ -13,7 +13,8 @@ namespace libcomp {
 namespace math {
 
 /**
- *  @defgroup math_matrix libcomp::math::Matrix
+ *  @defgroup matrix Matrix
+ *  @ingroup  math
  *  @{
  */
 
