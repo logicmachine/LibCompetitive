@@ -64,7 +64,7 @@ struct SeparatorDecompositionDFSFrame {
 /**
  *  @brief 木の重心分解 (Separator decomposition, Centroid decomposition)
  *
- *  計算量は \f$ \mathcal{O}(|V| log{|V|}) \f$。
+ *  計算量は \f$ \mathcal{O}(|V| \log{|V|}) \f$。
  *
  *  @tparam    EDGE_TYPE  辺データ型。to を持つもの。
  *  @param[in] conn       グラフデータ。木であること。
