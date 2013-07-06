@@ -23,6 +23,9 @@ if(len(args) != 1):
 re_pragma_once = re.compile('^\#\s*pragma\s+once')
 re_common_include = re.compile('^\#\s*include\s<([^>]*)>')
 re_user_include = re.compile('^\#\s*include\s"([^"]*)"')
+re_single_doc_comment = re.compile('^\s*///')
+re_multi_doc_comment_begin = re.compile('^\s*/\*\*')
+re_multi_doc_comment_end = re.compile('^\s*\*/\s*$')
 
 def get_next_file(current, filename):
 	if os.path.exists(filename):
@@ -39,8 +42,20 @@ def load_file(filename, included, standards):
 	line_number = 0
 	lines = []
 	pragma_once = False
+	in_doc_comment = False
 	for line in open(filename, 'r'):
 		line_number += 1
+		if not options.line:
+			if not re_single_doc_comment.match(line) is None:
+				continue
+			if not re_multi_doc_comment_begin.match(line) is None:
+				in_doc_comment = True
+				continue
+			if not re_multi_doc_comment_end.match(line) is None:
+				in_doc_comment = False
+				continue
+			if in_doc_comment:
+				continue
 		if not re_pragma_once.match(line) is None:
 			if filename in included:
 				return []
