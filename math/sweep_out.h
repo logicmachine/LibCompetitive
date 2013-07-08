@@ -9,13 +9,13 @@ namespace libcomp {
 namespace math {
 
 /**
- *  @defgroup linear_equation_lu Linear equation (LU decomposition)
+ *  @defgroup sweep_out Linear equation (Sweep-out)
  *  @ingroup  math
  *  @{
  */
 
 /**
- *  @brief LU分解による連立1次方程式の求解
+ *  @brief 掃き出し法による連立1次方程式の求解
  *
  *  連立1次方程式 
  *  \f{eqnarray}{
@@ -33,7 +33,7 @@ namespace math {
  *  @param[in] b  右辺値
  *  @return    方程式の解。見つからない場合は空のベクタを返す。
  */
-vector<double> linear_equation_lu(
+vector<double> sweep_out(
 	vector< vector<double> > a, vector<double> b)
 {
 	const int n = b.size();
@@ -73,5 +73,4 @@ vector<double> linear_equation_lu(
 
 }
 }
-
 

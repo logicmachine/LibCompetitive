@@ -1,7 +1,7 @@
 // AOJ 1328 - Find the Outlier
 #include <iostream>
 #include <cmath>
-#include "math/linear_equation_lu.h"
+#include "math/sweep_out.h"
 
 const double EPS = 1e-2;
 
@@ -39,7 +39,7 @@ int main(){
 				b[k] = v[j];
 				++k;
 			}
-			solutions[i] = libcomp::math::linear_equation_lu(A, b);
+			solutions[i] = libcomp::math::sweep_out(A, b);
 			written.push_back(i);
 		}
 		int answer = -1;
