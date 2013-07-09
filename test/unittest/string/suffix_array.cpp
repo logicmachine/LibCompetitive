@@ -1,8 +1,10 @@
 #include <gtest/gtest.h>
 #include <cstring>
-#include "string/suffix_array.cpp"
+#include "string/suffix_array.h"
 #include "../../utility/random.h"
 #include "../../utility/stopwatch.h"
+
+using libcomp::string::SuffixArray;
 
 static string generate_random_string(int n){
 	string s(n, ' ');

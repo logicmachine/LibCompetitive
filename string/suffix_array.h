@@ -1,10 +1,24 @@
+/**
+ *  @file string/suffix_array.h
+ */
+#pragma once
 #include <string>
 #include <vector>
 #include <algorithm>
-#include <iostream>
+#include "common/header.h"
 
-using namespace std;
+namespace libcomp {
+namespace string {
 
+/**
+ *  @defgroup suffix_array Suffix array
+ *  @ingroup  string
+ *  @{
+ */
+
+/**
+ *  @brief Larsson-Sadakane法によるSuffix array
+ */
 class SuffixArray {
 
 private:
@@ -16,11 +30,19 @@ private:
 		}
 	};
 
-	string m_string;
+	::std::string m_string;
 	vector<int> m_pos;
 
 public:
-	explicit SuffixArray(const string &s = string()) :
+	/**
+	 *  @brief コンストラクタ
+	 *
+	 *  Larsson-Sadakane法を用いてSuffix arrayを構築する。
+	 *  計算量は \f$ \mathcal{O}(|s| (\log |s|)^2) \f$。
+	 *
+	 *  @param[in] s  Suffix arrayを構築する文字列
+	 */
+	explicit SuffixArray(const ::std::string &s = ::std::string()) :
 		m_string(s), m_pos(s.size() + 1)
 	{
 		int n = s.size() + 1;
@@ -67,12 +89,37 @@ public:
 		for(int i = 0; i < n; ++i){ m_pos[i] = ptrs[i] - head; }
 	}
 
-	const string &str() const { return m_string; }
+	/**
+	 *  @brief 元文字列の取得
+	 *  @return Suffix arrayの元となった文字列
+	 */
+	const ::std::string &str() const { return m_string; }
+	/**
+	 *  @brief Suffix arrayのサイズ取得
+	 *  @return Suffix arrayのサイズ (元文字列の長さ+1)
+	 */
 	size_t size() const { return m_pos.size(); }
+	/**
+	 *  @brief 辞書順でi番目の接尾辞の先頭へのオフセット取得
+	 *  @param[in] i  インデックス
+	 *  @return    辞書順でi番目の接尾辞の先頭へのオフセット
+	 */
 	int position(int i) const { return m_pos[i]; }
+	/**
+	 *  @brief 辞書順でi番目の接尾辞の取得
+	 *  @param[in] i  インデックス
+	 *  @return    辞書順でi番目の接尾辞の取得
+	 */
 	const char *operator[](int i) const {
 		return m_string.c_str() + m_pos[i];
 	}
 
 };
+
+/**
+ *  @}
+ */
+
+}
+}
 
