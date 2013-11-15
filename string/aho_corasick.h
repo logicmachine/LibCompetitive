@@ -19,7 +19,7 @@ namespace string {
  */
 
 /**
- *  @brief Aho-Corasick法によるパターンマッチオートマトン生成
+ *  @brief Aho-Corasick法による複数パターン文字列検索
  */
 class AhoCorasick {
 
@@ -50,7 +50,7 @@ public:
 	 *  patternsに含まれる文字列からパターンマッチオートマトンを生成する。
 	 *  計算量は \f$ \mathcal{O}(\sum {|S_i|}) \f$。
 	 *
-	 *  @param[in] patterns  パタンマッチオートマトンに含める文字列集合
+	 *  @param[in] patterns  パターンマッチオートマトンに含める文字列集合
 	 */
 	explicit AhoCorasick(const vector<std::string> &patterns) : m_states() {
 		vector<State> &ss = m_states;
