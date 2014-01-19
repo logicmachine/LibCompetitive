@@ -1,8 +1,10 @@
 /**
- *  @file geometry/essential/line.h
+ *  @file geometry/line.h
  */
 #pragma once
 #include "point.h"
+
+#define LIBCOMP_GEOMETRY_LINE
 
 namespace libcomp {
 namespace geometry {
@@ -62,14 +64,25 @@ struct Line {
 };
 
 /**
- *  @brief 直線の比較 (==, 誤差許容)
+ *  @brief 直線の比較 (==, 誤差許容, 無向)
  *  @param[in] a      比較する値
  *  @param[in] b      比較する値
  *  @retval    true   aとbが同じ直線を表している場合
- *  @retval    true   aとbが同じ直線を表していない場合
+ *  @retval    false  aとbが同じ直線を表していない場合
  */
-bool tolerant_eq(const Line &a, const Line &b){
-	return ::std::abs(cross(a.b - a.a, b.a - a.a)) < EPS;
+inline bool tolerant_eq(const Line &a, const Line &b){
+	return abs(cross(a.b - a.a, b.a - a.a)) < EPS;
+}
+
+/**
+ *  @brief 直線の比較 (==, 誤差許容, 有向)
+ *  @param[in] a      比較する値
+ *  @param[in] b      比較する値
+ *  @retval    true   aとbが同じ直線を表している場合
+ *  @retval    false  aとbが同じ直線を表していない場合
+ */
+inline bool directed_tolerant_eq(const Line &a, const Line &b){
+	return tolerant_eq(a, b) && tolerant_eq(unit(a.a - a.b), unit(b.a - b.b));
 }
 
 /**
@@ -78,7 +91,7 @@ bool tolerant_eq(const Line &a, const Line &b){
  *  @param[in] p  射影する点
  *  @return    直線l上で最も点pに近くなる座標
  */
-Point projection(const Line &l, const Point &p){
+inline Point projection(const Line &l, const Point &p){
 	double t = dot(p - l.a, l.b - l.a) / norm(l.b - l.a);
 	return l.a + t * (l.b - l.a);
 }
@@ -89,7 +102,7 @@ Point projection(const Line &l, const Point &p){
  *  @param[in] p  変換する点
  *  @return    直線l上を挟んで点pと対称な点
  */
-Point reflection(const Line &l, const Point &p){
+inline Point reflection(const Line &l, const Point &p){
 	return p + 2.0 * (projection(l, p) - p);
 }
 

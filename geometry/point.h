@@ -1,9 +1,11 @@
 /**
- *  @file geometry/essential/point.h
+ *  @file geometry/point.h
  */
 #pragma once
 #include <limits>
 #include "common.h"
+
+#define LIBCOMP_GEOMETRY_POINT
 
 namespace libcomp {
 namespace geometry {
@@ -34,7 +36,7 @@ struct Point {
 
 	/**
 	 *  @brief 不正な点の取得
-	 *  @returns 不正な点を示すデータ
+	 *  @return 不正な点を示すデータ
 	 */
 	static Point invalid(){
 		double qnan = numeric_limits<double>::quiet_NaN();
@@ -84,6 +86,20 @@ struct Point {
 	 */
 	Point &operator*=(double s){ return *this = *this * s; }
 	/**
+	 *  @brief 座標値の複素数倍
+	 *  @param[in] p  乗算する値
+	 *  @return    *this * p;
+	 */
+	Point operator*(const Point &p) const {
+		return Point(x * p.x - y * p.y, x * p.y + y * p.x);
+	}
+	/**
+	 *  @brief 座標値の複素数倍 (代入)
+	 *  @param[in] p  乗算する値
+	 *  @return    自身への参照
+	 */
+	Point &operator*=(const Point &p){ return *this = *this * p; }
+	/**
 	 *  @brief 座標値のスカラ倍 (除算)
 	 *  @param[in] s  除算する値
 	 *  @return    (this->x / s, this->y / s)
@@ -127,7 +143,7 @@ struct Point {
  *  @param[in] p  乗算する座標
  *  @return    (this->x * s, this->y * s)
  */
-Point operator*(double s, const Point &p){ return p * s; }
+inline Point operator*(double s, const Point &p){ return p * s; }
 
 /**
  *  @brief 点同士の比較 (==, 誤差許容)
@@ -136,7 +152,7 @@ Point operator*(double s, const Point &p){ return p * s; }
  *  @retval    true   aとbが十分に近い座標を表している
  *  @retval    false  aとbが十分に近い座標を表していない
  */
-bool tolerant_eq(const Point &a, const Point &b){
+inline bool tolerant_eq(const Point &a, const Point &b){
 	return tolerant_eq(a.x, b.x) && tolerant_eq(a.y, b.y);
 }
 
@@ -145,39 +161,43 @@ bool tolerant_eq(const Point &a, const Point &b){
  *  @param[in] p  対象とする点
  *  @return    (0, 0) と p のユークリッド距離
  */
-double abs(const Point &p){ return sqrt(p.x * p.x + p.y * p.y); }
+inline double abs(const Point &p){ return sqrt(p.x * p.x + p.y * p.y); }
 /**
  *  @brief ある点と原点の間の2乗ノルムを求める
  *  @param[in] p  対象とする点
  *  @return    (0, 0) と p の2乗ノルム
  */
-double norm(const Point &p){ return p.x * p.x + p.y * p.y; }
+inline double norm(const Point &p){ return p.x * p.x + p.y * p.y; }
 /**
  *  @brief 2次元ベクトルの正規化
  *  @param[in] p  正規化する2次元ベクトル
  *  @return    pを正規化した結果
  */
-Point unit(const Point &p){ return p / abs(p); }
+inline Point unit(const Point &p){ return p / abs(p); }
 /**
  *  @brief ある2次元ベクトルと直交するベクトルの計算
  *  @param[in] p  対象とする点
  *  @return    pと直交するベクトル
  */
-Point ortho(const Point &p){ return Point(-p.y, p.x); }
+inline Point ortho(const Point &p){ return Point(-p.y, p.x); }
 /**
  *  @brief クロス積の計算
  *  @param[in] a  計算に用いる項
  *  @param[in] b  計算に用いる項
  *  @return       aとbのクロス積
  */
-double cross(const Point &a, const Point &b){ return a.x * b.y - a.y * b.x; }
+inline double cross(const Point &a, const Point &b){
+	return a.x * b.y - a.y * b.x;
+}
 /**
  *  @brief ドット積の計算
  *  @param[in] a  計算に用いる項
  *  @param[in] b  計算に用いる項
  *  @return       aとbのドット積
  */
-double dot(const Point &a, const Point &b){ return a.x * b.x + a.y * b.y; }
+inline double dot(const Point &a, const Point &b){
+	return a.x * b.x + a.y * b.y;
+}
 /**
  *  @brief 点の進行方向の計算
  *  @param[in] a   始点の座標
@@ -189,7 +209,7 @@ double dot(const Point &a, const Point &b){ return a.x * b.x + a.y * b.y; }
  *  @retval    2   曲線(a, b, c)が点bで180度曲がり点cが点aを通り過ぎる場合
  *  @retval    -2  曲線(a, b, c)が一直線である場合
  */ 
-int ccw(const Point &a, const Point &b, const Point &c){
+inline int ccw(const Point &a, const Point &b, const Point &c){
 	Point d = b - a, e = c - a;
 	if(cross(d, e) > 0.0){ return 1; }
 	if(cross(d, e) < 0.0){ return -1; }
