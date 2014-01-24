@@ -5,6 +5,7 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
+#include <limits>
 #include "common/header.h"
 
 namespace libcomp {
@@ -17,31 +18,62 @@ namespace structure {
  */
 
 /**
- *  @brief セグメント木
- *  @tparam T         データ型
- *  @tparam DEFAULT   葉の要素の既定値
- *  @tparam Function  二項演算を行う関数オブジェクトの型
+ *  @brief  セグメント木による区間最小クエリ
+ *  @tparam T  値の型
  */
-template <typename T, T DEFAULT, typename Function>
+template <typename T>
+struct MinSegmentTreeTraits {
+	/// 値型
+	typedef T value_type;
+	/// 各ノードのデフォルト値
+	T default_value() const { return numeric_limits<T>::max(); }
+	/// 二項演算を行う関数
+	T operator()(const T &a, const T &b) const { return min(a, b); }
+};
+
+/**
+ *  @brief  セグメント木による区間最大クエリ
+ *  @tparam T  値の型
+ */
+template <typename T>
+struct MaxSegmentTreeTraits {
+	/// 値型
+	typedef T value_type;
+	/// 各ノードのデフォルト値
+	T default_value() const { return numeric_limits<T>::min(); }
+	/// 二項演算を行う関数
+	T operator()(const T &a, const T &b) const { return max(a, b); }
+};
+
+/**
+ *  @brief  セグメント木
+ *  @sa MinSegmentTreeTraits
+ *  @tparam Traits  セグメント木の動作を示す型
+ */
+template <typename Traits>
 class SegmentTree {
 
+public:
+	/// 値型
+	typedef typename Traits::value_type value_type;
+
 private:
-	vector<T> m_data;		// 節点データ領域
-	int m_internal_size;	// 葉の数
-	Function m_func;		// 二項演算を行う関数オブジェクト
+	Traits m_traits;
+	vector<value_type> m_data;
+	size_t m_size;
 
 	void initialize(){
-		for(int i = m_internal_size - 2; i >= 0; --i){
-			m_data[i] = m_func(m_data[i * 2 + 1], m_data[i * 2 + 2]);
+		for(int i = static_cast<int>(m_size) - 2; i >= 0; --i){
+			m_data[i] = m_traits(m_data[i * 2 + 1], m_data[i * 2 + 2]);
 		}
 	}
 
-	T query(int a, int b, int k, int l, int r) const {
-		if(r <= a || b <= l){ return DEFAULT; }
+	value_type query(int a, int b, int k, int l, int r) const {
+		if(r <= a || b <= l){ return m_traits.default_value(); }
 		if(a <= l && r <= b){ return m_data[k]; }
-		T vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
-		T vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
-		return m_func(vl, vr);
+		const value_type vl = query(a, b, k * 2 + 1, l, (l + r) / 2);
+		const value_type vr = query(a, b, k * 2 + 2, (l + r) / 2, r);
+		return m_traits(vl, vr);
 	}
 
 public:
@@ -51,36 +83,36 @@ public:
 	 *  葉をすべて既定値で初期化した状態のセグメント木を構築する。
 	 *  計算量は \f$ \mathcal{O}(n) \f$。
 	 *
-	 *  @param[in] n     最低限必要な葉の数
-	 *  @param[in] func  計算に用いる二項演算を行う関数オブジェクト
+	 *  @param[in] size    最低限必要な葉の数
+	 *  @param[in] traits  処理内容を示す関数オブジェクト
 	 */
-	explicit SegmentTree(int n, const Function &func = Function()) :
-		m_internal_size(1), m_func(func)
+	explicit SegmentTree(size_t size, const Traits &traits = Traits()) :
+		m_size(1), m_traits(traits)
 	{
-		while(m_internal_size < n){ m_internal_size *= 2; }
-		m_data = vector<T>(m_internal_size * 2 - 1, DEFAULT);
+		while(m_size < size){ m_size *= 2; }
+		m_data.resize(m_size * 2 - 1, m_traits.default_value());
 		initialize();
 	}
 
 	/**
 	 *  @brief コンストラクタ (要素列による初期化)
 	 *
-	 *  葉をすべて [begin, end) で初期化した状態のセグメント木を構築する。
-	 *  計算量は \f$ \mathcal{O}(n) (n = distance(begin, end)) \f$。
+	 *  葉をすべて [first, last) で初期化した状態のセグメント木を構築する。
+	 *  計算量は \f$ \mathcal{O}(n) (n = distance(first, last)) \f$。
 	 *
-	 *  @param[in] begin  要素列の先頭を指すイテレータ
-	 *  @param[in] end    要素列の終端を指すイテレータ
-	 *  @param[in] func  計算に用いる二項演算を行う関数オブジェクト
+	 *  @param[in] first   要素列の先頭を指すイテレータ
+	 *  @param[in] last    要素列の終端を指すイテレータ
+	 *  @param[in] traits  処理内容を示す関数オブジェクト
 	 */
 	template <typename Iterator>
 	SegmentTree(
-		Iterator begin, Iterator end, const Function &func = Function()) :
-		m_internal_size(1), m_func(func)
+		Iterator first, Iterator last, const Traits &traits = Traits()) :
+		m_size(1), m_traits(traits)
 	{
-		const int n = distance(begin, end);
-		while(m_internal_size < n){ m_internal_size *= 2; }
-		m_data = vector<T>(m_internal_size * 2 - 1, DEFAULT);
-		copy(begin, end, m_data.begin());
+		const size_t n = distance(first, last);
+		while(m_size < n){ m_size *= 2; }
+		m_data.resize(m_size * 2 - 1, m_traits.default_value());
+		copy(first, last, m_data.begin() + m_size - 1);
 		initialize();
 	}
 
@@ -93,27 +125,27 @@ public:
 	 *  @param[in] i    更新したい葉のインデックス
 	 *  @param[in] val  更新後の値
 	 */
-	void update(int i, const T &val){
-		i += m_internal_size - 1;
+	void update(size_t i, const value_type &val){
+		i += m_size - 1;
 		m_data[i] = val;
 		while(i > 0){
 			i = (i - 1) / 2;
-			m_data[i] = m_func(m_data[i * 2 + 1], m_data[i * 2 + 2]);
+			m_data[i] = m_traits(m_data[i * 2 + 1], m_data[i * 2 + 2]);
 		}
 	}
 
 	/**
 	 *  @brief 区間についての問い合わせ
 	 *
-	 *  インデックスが区間 [a, b) に含まれる要素すべてを func で結合した結果を求める。
+	 *  インデックスが区間 [a, b) に含まれる要素すべてを結合した結果を求める。
 	 *  計算量は \f$ \mathcal{O}(\log{n}) \f$。
 	 *
 	 *  @param[in] a  区間の始端
 	 *  @param[in] b  区間の終端
 	 *  @return    計算された結果
 	 */
-	T query(int a, int b) const {
-		return query(a, b, 0, 0, m_internal_size);
+	value_type query(size_t a, size_t b) const {
+		return query(a, b, 0, 0, m_size);
 	}
 
 };
