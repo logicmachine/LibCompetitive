@@ -86,7 +86,7 @@ public:
 	 *  @param[in] size    最低限必要な葉の数
 	 *  @param[in] traits  処理内容を示す関数オブジェクト
 	 */
-	explicit SegmentTree(size_t size, const Traits &traits = Traits()) :
+	explicit SegmentTree(size_t size = 0, const Traits &traits = Traits()) :
 		m_size(1), m_traits(traits)
 	{
 		while(m_size < size){ m_size *= 2; }
