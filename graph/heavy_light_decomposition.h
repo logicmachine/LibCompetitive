@@ -41,6 +41,28 @@ public:
 		{ }
 	};
 
+	/**
+	 *  @brief パス上の区間
+	 */
+	struct Segment {
+		/// パス番号
+		int path;
+		/// パス上での始点
+		int first;
+		/// パス上での終端
+		int last;
+
+		/**
+		 *  @brief コンストラクタ
+		 *  @param[in] path   パス番号
+	 	 *  @param[in] first  パス上での始点
+		 *  @param[in] last   パス上での終端
+		 */
+		explicit Segment(int path = -1, int first = -1, int last = -1) :
+			path(path), first(first), last(last)
+		{ }
+	};
+
 private:
 	typedef pair<int, int> pii;
 
@@ -238,6 +260,41 @@ public:
 	 *  @return    パス p の i 番目の頂点の頂点番号
 	 */
 	int vertex_id(int p, int i) const { return m_paths[p].vertices[i]; }
+
+	/**
+	 *  @brief 2頂点間の最短路の計算
+	 *  @param[in] u  始点となる頂点の番号
+	 *  @param[in] v  終点となる頂点の番号
+	 *  @return    u から v へ向かうときに経由する区間の列
+	 */
+	vector<Segment> shortest_path(int u, int v) const {
+		vector<Segment> usegs, vsegs, result;
+		int up = path_id(u), ul = local_index(u);
+		int vp = path_id(v), vl = local_index(v);
+		while(up != vp){
+			const bool update_u = path_depth(up) >= path_depth(vp);
+			const bool update_v = path_depth(up) <= path_depth(vp);
+			if(update_u){
+				usegs.push_back(Segment(up, 0, ul + 1));
+				ul = parent_local_index(up);
+				up = parent_path_id(up);
+			}
+			if(update_v){
+				vsegs.push_back(Segment(vp, 0, vl + 1));
+				vl = parent_local_index(vp);
+				vp = parent_path_id(vp);
+			}
+		}
+		for(int i = 0; i < static_cast<int>(usegs.size()); ++i){
+			const Segment &s = usegs[i];
+			result.push_back(Segment(s.path, s.last - 1, s.first - 1));
+		}
+		result.push_back(Segment(up, ul, vl + (ul > vl ? -1 : 1)));
+		for(int i = static_cast<int>(vsegs.size()) - 1; i >= 0; --i){
+			result.push_back(vsegs[i]);
+		}
+		return result;
+	}
 
 };
 
