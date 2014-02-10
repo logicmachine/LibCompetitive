@@ -207,6 +207,59 @@ public:
 	 */
 	Matrix<T> &operator*=(const Matrix<T> &m){ return *this = *this * m; }
 
+	/**
+	 *  @brief 行の入れ替え
+	 *  @param[in] a  入れ替える行
+	 *  @param[in] b  入れ替える行
+	 */
+	void swap_rows(int a, int b){
+		if(a == b){ return; }
+		data[a].swap(data[b]);
+	}
+
+	/**
+	 *  @brief 列の入れ替え
+	 *  @param[in] a  入れ替える列
+	 *  @param[in] b  入れ替える列
+	 */
+	void swap_columns(int a, int b){
+		if(a == b){ return; }
+		for(int i = 0; i < N; ++i){ swap(data[i][a], data[i][b]); }
+	}
+
+	/**
+	 *  @brief 行列の階数
+	 *
+	 *  行列の階数 rank(A) を求める。
+	 *  計算量は $\f \mathcal{O}(N^2 M) $\f。
+	 *
+	 *  @return 行列の階数
+	 */
+	int rank() const {
+		const double EPS = 1e-10;
+		Matrix<double> A(N, M);
+		for(int i = 0; i < N; ++i){
+			for(int j = 0; j < M; ++j){ A(i, j) = (*this)(i, j); }
+		}
+		int r = 0;
+		for(int i = 0; r < N && i < M; ++i){
+			int max_r = r;
+			for(int j = r + 1; j < N; ++j){
+				if(::abs(A(j, i)) > ::abs(A(max_r, i))){ max_r = j; }
+			}
+			if(::abs(A(max_r, i)) < EPS){ continue; }
+			A.swap_rows(max_r, r);
+			const double x = 1.0 / A(r, i);
+			for(int j = i; j < M; ++j){ A(r, j) *= x; }
+			for(int j = r + 1; j < N; ++j){
+				const double y = A(j, i);
+				for(int k = i; k < M; ++k){ A(j, k) -= A(r, k) * y; }
+			}
+			++r;
+		}
+		return r;
+	}
+
 };
 
 /**
