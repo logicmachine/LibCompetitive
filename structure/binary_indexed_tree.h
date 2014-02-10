@@ -32,7 +32,7 @@ public:
 	 *
 	 *  @param[in] n  BITが格納可能な要素数
 	 */
-	BinaryIndexedTree(int n) : data(n + 1) { }
+	BinaryIndexedTree(int n = 0) : data(n + 1) { }
 
 	/**
 	 *  @brief 総和の計算
