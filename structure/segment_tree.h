@@ -5,7 +5,6 @@
 #include <vector>
 #include <algorithm>
 #include <iterator>
-#include <limits>
 #include "common/header.h"
 
 namespace libcomp {
@@ -16,34 +15,6 @@ namespace structure {
  *  @ingroup  structure
  *  @{
  */
-
-/**
- *  @brief  セグメント木による区間最小クエリ
- *  @tparam T  値の型
- */
-template <typename T>
-struct MinSegmentTreeTraits {
-	/// 値型
-	typedef T value_type;
-	/// 各ノードのデフォルト値
-	T default_value() const { return numeric_limits<T>::max(); }
-	/// 二項演算を行う関数
-	T operator()(const T &a, const T &b) const { return min(a, b); }
-};
-
-/**
- *  @brief  セグメント木による区間最大クエリ
- *  @tparam T  値の型
- */
-template <typename T>
-struct MaxSegmentTreeTraits {
-	/// 値型
-	typedef T value_type;
-	/// 各ノードのデフォルト値
-	T default_value() const { return numeric_limits<T>::min(); }
-	/// 二項演算を行う関数
-	T operator()(const T &a, const T &b) const { return max(a, b); }
-};
 
 /**
  *  @brief  セグメント木
@@ -90,7 +61,7 @@ public:
 		m_size(1), m_traits(traits)
 	{
 		while(m_size < size){ m_size *= 2; }
-		m_data.resize(m_size * 2 - 1, m_traits.default_value());
+		m_data.assign(m_size * 2 - 1, m_traits.default_value());
 		initialize();
 	}
 
@@ -146,6 +117,19 @@ public:
 	 */
 	value_type query(size_t a, size_t b) const {
 		return query(a, b, 0, 0, m_size);
+	}
+
+	/**
+	 *  @brief 葉の取得
+	 *
+	 *  i番目の葉の値を取得する。
+	 *  計算量は \f$ \mathcal{O}(1) \f$。
+	 *
+	 *  @param[in] i  取得する葉のインデックス
+	 *  @return    取得された値
+	 */
+	value_type operator[](size_t i) const {
+		return m_data[m_size - 1 + i];
 	}
 
 };
