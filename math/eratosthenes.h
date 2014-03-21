@@ -2,7 +2,6 @@
  *  @file math/eratosthenes.h
  */
 #pragma once
-#include <bitset>
 #include <vector>
 #include "common/header.h"
 
