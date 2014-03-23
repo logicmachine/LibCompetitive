@@ -3,7 +3,9 @@
  */
 #pragma once
 #include <vector>
+#include <stack>
 #include <algorithm>
+#include <utility>
 #include "common/header.h"
 
 namespace libcomp {
@@ -29,6 +31,7 @@ template <typename EDGE_TYPE>
 vector<int> strongly_connected_components(
 	const vector< vector<EDGE_TYPE> > &conn)
 {
+	typedef pair<int, int> pii;
 	const int n = conn.size();
 	vector< vector<int> > rconn(n);
 	for(int i = 0; i < conn.size(); ++i){
@@ -36,44 +39,35 @@ vector<int> strongly_connected_components(
 			rconn[conn[i][j].to].push_back(i);
 		}
 	}
-	// Forward DFS
-	struct {
-		void operator()(
-			int v, const vector< vector<EDGE_TYPE> > &conn,
-			vector<bool> &used, vector<int> &vs)
-		{
-			used[v] = true;
-			for(int i = 0; i < conn[v].size(); ++i){
-				if(used[conn[v][i].to]){ continue; }
-				(*this)(conn[v][i].to, conn, used, vs);
-			}
-			vs.push_back(v);
-		}
-	} scc_forward_dfs;
-	vector<bool> used(n);
-	vector<int> vs;
+	vector<int> used(n), vs;
 	for(int i = 0; i < n; ++i){
-		if(!used[i]){ scc_forward_dfs(i, conn, used, vs); }
-	}
-	// Backward DFS
-	struct {
-		void operator()(
-			int v, int k, const vector< vector<int> > &rconn,
-			vector<bool> &used, vector<int> &comp)
-		{
-			used[v] = true;
-			comp[v] = k;
-			for(int i = 0; i < rconn[v].size(); ++i){
-				if(used[rconn[v][i]]){ continue; }
-				(*this)(rconn[v][i], k, rconn, used, comp);
+		if(used[i]){ continue; }
+		stack<pii> st;
+		st.push(pii(i, 0));
+		while(!st.empty()){
+			const int v = st.top().first, j = st.top().second;
+			st.pop();
+			if(j == 0){ used[v] = 1; }
+			if(j == conn[v].size()){
+				vs.push_back(v);
+			}else{
+				st.push(pii(v, j + 1));
+				if(!used[conn[v][j].to]){ st.push(pii(conn[v][j].to, 0)); }
 			}
 		}
-	} scc_backward_dfs;
-	fill(used.begin(), used.end(), 0);
-	vector<int> result(n);
-	for(int i = vs.size() - 1, k = 0; i >= 0; --i){
-		if(!used[vs[i]]){
-			scc_backward_dfs(vs[i], vs[i], rconn, used, result);
+	}
+	vector<int> result(n, -1);
+	for(int i = n - 1; i >= 0; --i){
+		if(result[vs[i]] >= 0){ continue; }
+		stack<pii> st;
+		st.push(pii(vs[i], 0));
+		while(!st.empty()){
+			const int v = st.top().first, j = st.top().second;
+			st.pop();
+			if(j == 0){ result[v] = vs[i]; }
+			if(j == rconn[v].size()){ continue; }
+			st.push(pii(v, j + 1));
+			if(result[rconn[v][j]] < 0){ st.push(pii(rconn[v][j], 0)); }
 		}
 	}
 	return result;
